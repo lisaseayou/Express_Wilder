@@ -1,5 +1,6 @@
 // create, read, update, delete
 import WilderModel from "../models/Wilder";
+import { listErrors } from "./../utilities/tools";
 
 export default {
   create: (req, res, next) => {
@@ -42,7 +43,7 @@ export default {
   delete: (req, res) => {
     const { id } = req.params;
     WilderModel.init().then(() => {
-      WilderModel.deleteOne({ id })
+      WilderModel.deleteOne({ _id: id })
         .then((result) => {
           console.log("success", result);
           res.json({
@@ -57,7 +58,7 @@ export default {
     console.log("ok");
     const { id } = req.params;
     WilderModel.init().then(() => {
-      WilderModel.updateOne({ id }, req.body)
+      WilderModel.updateOne({ _id : id }, req.body)
         .then((result) => {
           console.log("success", result);
           res.json({

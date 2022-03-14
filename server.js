@@ -2,29 +2,26 @@
 
 import express from "express"; //ES6
 import mongoose from "mongoose";
-import wilderController from "./controllers/wilder";
-import { wilderValidation } from "./validations";
 import dotenv from "dotenv"; 
+import wilderRouter from "./routes/wilder"; 
 
 dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = 3030;
 
 mongoose
-  .connect(process.env.MONGO_URI, {autoIndex: true})
+  .connect(`${process.env.MONGO_URI}`, {autoIndex: true})
   .then(() => console.log("Connecté à la BDD"))
   .catch((err) => console.log(err));
 
 app.use(express.urlencoded({ extended: true })); //middleware éxécuté avant la requête
 app.use(express.json());
 
-app.post(
-  "/api/wilder/create",
-  wilderValidation.create,
-  wilderController.create
-);
-//app.get("/", method.find);
-//app.delete("/api/wilder/:id", method.delete); 
-//app.put("/api/wilder/:id", method.update); 
-app.listen(port, () => console.log("serveur is listening on port 3000"));
+ app.use("/api/wilder" , wilderRouter)
+ 
+app.use((req, res) => {
+  // res.send("Route qui n'existe pas", 404)
+  res.status(404).send("Route qui n'existe pas");
+});
+app.listen(port, () => console.log(`"serveur is listening on port ${port}"`));
